@@ -10,11 +10,12 @@ def home(request):
     return render(request, "index.html")
 
 def branch(request):
-    example = {"commits": [{"date": "2014.12.13.21.43", "branch": "master", "coverage": 69},
-                {"date": "2014.12.14.21.50", "branch": "master", "coverage": 77},
-                {"date": "2014.12.15.11.50", "branch": "api", "coverage": 40},
-                {"date": "2014.12.15.21.50", "branch": "test", "coverage": 90},
-                {"date": "2014.12.16.21.50", "branch": "master", "coverage": 73}]}
+    example = {"commits":
+                [{"date": "2014.12.13.21.43", "branch": "master", "coverage": 69, "ssh": "1111", "author": "me"},
+                {"date": "2014.12.14.21.50", "branch": "master", "coverage": 77, "ssh": "1112", "author": "me"},
+                {"date": "2014.12.15.11.50", "branch": "api", "coverage": 40, "ssh": "1121", "author": "he"},
+                {"date": "2014.12.15.21.50", "branch": "test", "coverage": 90, "ssh": "2111", "author": "she"},
+                {"date": "2014.12.16.21.50", "branch": "master", "coverage": 73, "ssh": "1113", "author": "me"}]}
     return HttpResponse(json.dumps(example), content_type="application/json")
 
 

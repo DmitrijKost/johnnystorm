@@ -1,0 +1,29 @@
+{% extends "code_coverage/base.html" %}
+    {% block header %}Enter test files paths{% endblock %}
+    {% block content %}
+    <form method="post" action="">
+    {% if repo_id %}
+    <input type="hidden" name="repo_id" value="{{ repo_id }}"/>
+    {% endif %}
+    {% csrf_token %}
+    <table>
+    {% if commits %}
+    {% for commit in commits %}
+        <tr>
+        <td>{{ commit.head }} {{ commit.commit }}</td><td><input type="text" name="{{ commit.commit }}" style="width: 400pt;"/></td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+    {% if files %}
+    {% for file in files %}
+        <tr>
+        <td>{{ file }}</td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+    <tr>
+    <td></td><td><input type="submit" value="NEXT"></td>
+    </tr>
+    </table>
+    </form>
+    {% endblock %}

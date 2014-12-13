@@ -1,0 +1,15 @@
+{% extends "code_coverage/base.html" %}
+{% block doc_name %}
+    Registration
+{% endblock %}
+{%  block content %}
+    {{ error_message }}
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="User name"/>
+        <input type="text" name="email" placeholder="E-Mail" />
+        <input type="password" name="password" placeholder="Password"/>
+        <input type="password" name="password2" placeholder="Confirm password"/>
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}

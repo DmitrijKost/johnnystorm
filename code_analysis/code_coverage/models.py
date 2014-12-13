@@ -36,3 +36,7 @@ class Line(models.Model):
     actor = models.ForeignKey(Actor)
     num = models.IntegerField()
     coverage = models.BooleanField(default=0)
+
+#class Access(models.Model):
+#    user=models.ForeignKey(user)
+#    Repository=ForeignKey(Repository)

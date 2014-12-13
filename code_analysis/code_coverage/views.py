@@ -25,7 +25,7 @@ import re
 
 def index(request):
     template = 'code_coverage/index.html'
-    context={}
+    context = {}
     return render(request, template, context)
 
 #def selectorReps(request):
@@ -57,13 +57,15 @@ class DownloaderView(View, TemplateResponseMixin, FormMixin):
             return self.form_invalid(form, **kwargs)
 
     def form_valid(self, form, **kwargs):
+        print('user')
+        message = ''
         url = form.cleaned_data["url"]
         try:
             if Repository.objects.filter(url=url):
                 r = Repository.objects.get(url=url)
                 path = r.work_dir
                 g = Git(path)
-                #g.execute('git push %s master' % r.url) !!!IMPORTANT
+                g.execute('git push %s master' % r.url) #!!!IMPORTANT
                 message = "Updated"
             else:
                 path = "cache/%s" % "_".join(url.split('/')[2:])
@@ -72,6 +74,7 @@ class DownloaderView(View, TemplateResponseMixin, FormMixin):
                 r.save()
             g = Git(path)
             repo = Repo(path)
+            i=1
             for head in repo.heads:
                 head.checkout()
                 head_commit = head.commit
@@ -83,7 +86,7 @@ class DownloaderView(View, TemplateResponseMixin, FormMixin):
                     b = Branch(repository=r, name=head.name)
                     b.save()
                 else:
-                    b = Branch.objects.get(name=head.name)
+                    b = Branch.objects.get(name=head.name,repository=r)
                 for commit in branch_commits:
                     g.execute('git checkout %s' % commit.hexsha)
                     if not DBCommit.objects.filter(branch=b, sha=commit.hexsha):
@@ -96,7 +99,12 @@ class DownloaderView(View, TemplateResponseMixin, FormMixin):
                         c.save()
                     else:
                         c = DBCommit.objects.get(branch=b, sha=commit.hexsha)
+                        i += 1
+                    message += str(commit)+'\n'+' commit '+str(i)
                     files = self.walk(g, commit)
+                    if(files is None):
+                        print('ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nfiles is None!!')
+                        return self.render_to_response(self.get_context_data(message=message), **kwargs)
                     for file in files:
                         if not DBFile.objects.filter(commit=c, path_to_file=file):
                             f = DBFile(commit=c, path_to_file=file)
@@ -131,13 +139,17 @@ class DownloaderView(View, TemplateResponseMixin, FormMixin):
         return self.render_to_response(self.get_context_data(message="Wrong url!"), **kwargs)
 
     def walk(self, g, commit):
-        pyfile = re.compile('.*\.py$')
-        files = []
-        for t in commit.tree.trees:
-            self.walk(g, t)
-        for b in commit.tree.blobs:
-            if pyfile.match(str(b.abspath)):
-                files.append(b.abspath)
+        try:
+            pyfile = re.compile('.*\.py$')
+            files = []
+            for t in commit.tree.trees:
+                self.walk(g, t)
+            for b in commit.tree.blobs:
+                if pyfile.match(str(b.abspath)):
+                    files.append(b.abspath)
+        except AttributeError:
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return None
         return files
 
 

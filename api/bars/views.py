@@ -1,10 +1,27 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.generic import View
 from rest_framework import generics
 from bars.serializers import *
 
 
 def home(request):
     return render(request, "index.html")
+
+def branch(request):
+    example = {"commits": [{"date": "2014.12.13.21.43", "branch": "master", "coverage": 69},
+                {"date": "2014.12.14.21.50", "branch": "master", "coverage": 77},
+                {"date": "2014.12.15.11.50", "branch": "api", "coverage": 40},
+                {"date": "2014.12.15.21.50", "branch": "test", "coverage": 90},
+                {"date": "2014.12.16.21.50", "branch": "master", "coverage": 73}]}
+    return HttpResponse(json.dumps(example), content_type="application/json")
+
+
+class Example(View):
+    def index(request):
+        return render(request, 'index.html')
+
 
 class RepoList(generics.ListCreateAPIView):
     """

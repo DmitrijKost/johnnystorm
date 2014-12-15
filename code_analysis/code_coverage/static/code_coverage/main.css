@@ -1,0 +1,31 @@
+.main_content{
+        display: block;
+        border-width: thick;
+        border-style: solid;
+        border-color: cadetblue;
+        background-color: aliceblue;
+        width: 80%;
+        left: 10%;
+        top: 10%;
+        position:absolute;
+        word-break: break-all;
+    }
+    .header{
+        font-size: 20px;
+        font-family: sans-serif;
+        text-align: center;
+        padding: 5px;
+        margin: 5px;
+    }
+    .content{
+        font-size: 15px;
+        font-family: sans-serif;
+        padding: 5px;
+        margin: 5px;
+    }
+    .exit{
+        width: 5%;
+        left: 95%;
+        top: 95%;
+        position:absolute;
+    }

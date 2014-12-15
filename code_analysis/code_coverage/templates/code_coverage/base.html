@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load dajaxice_templatetags %}
+<html>
+<head>
+    {% load static %}
+    {% dajaxice_js_import %}
+    <script src="{% static 'code_analysis/js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'code_analysis/js/main.js' %}"></script>
+   {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'code_coverage/main.css' %}" />
+    <title>CodeCoverage module</title>
+</head>
+
+<body>
+    <div class="main_content">
+        <div class="header">
+            <a href={% url 'login' %} }}>Sign in</a>
+            <a href={% url 'register' %} }}>Registry</a>
+            <a href={% url 'logout' %} }}>log out</a>
+            {{ request.user }}
+            {% block header %}{% endblock %}
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
